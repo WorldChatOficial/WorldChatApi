@@ -16,17 +16,21 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/sign-upload", (req, res) => {
-  const timestamp = Math.floor(Date.now() / 1000);
+  const timestamp = Math.floor(Date.now() / 1000); // genera número entero
+  
   const paramsToSign = {
     timestamp,
     folder: "videos_app",
   };
 
-  const signature = cloudinary.utils.api_sign_request(paramsToSign, process.env.CLOUD_API_SECRET);
+  const signature = cloudinary.utils.api_sign_request(
+    paramsToSign,
+    process.env.CLOUD_API_SECRET
+  );
 
   res.json({
     signature,
-    timestamp,
+    timestamp: timestamp.toString(), // ← asegura que sea string y no número flotante
     apiKey: process.env.CLOUD_API_KEY,
     cloudName: process.env.CLOUD_NAME,
     folder: "videos_app",
